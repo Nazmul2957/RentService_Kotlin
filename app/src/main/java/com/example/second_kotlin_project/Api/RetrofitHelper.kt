@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitHelper {
 
-    private const val Base_Url = "http://test.codeminent.com/public/api/"
+    private const val Base_Url = "https://test.codeminent.com/public/api/"
 
 
     private val retrofit by lazy {
@@ -14,7 +14,7 @@ object RetrofitHelper {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-//
+
 //    fun getInstance(): Retrofit {
 //        return Retrofit.Builder()
 //            .baseUrl(Base_Url)

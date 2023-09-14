@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.second_kotlin_project.Mainviewmodelfactory.MainViewModelFactory
 import com.example.second_kotlin_project.R
-import com.example.second_kotlin_project.Repository.Registration_Repository
+import com.example.second_kotlin_project.Repository.Repository
 import com.example.second_kotlin_project.ViewModel.MainViewModel
 import com.example.second_kotlin_project.databinding.FragmentRegistrationBinding
 
@@ -19,18 +19,22 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
     var _binding: FragmentRegistrationBinding? = null
     val binding get() = _binding!!
 
-
-
+    lateinit var viewmodel: MainViewModel
+    //  var result: String = null.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
-        lateinit var viewmodel: MainViewModel
-        val repository = Registration_Repository()
-        val viewModelFactory = MainViewModelFactory(repository)
+
+
+        val repository = Repository()
+        viewmodel =
+            ViewModelProvider(
+                requireActivity(),
+                MainViewModelFactory(repository)
+            ).get(MainViewModel::class.java)
 
         binding.tookName.onFocusChangeListener = this
         binding.regAddress.onFocusChangeListener = this
@@ -39,11 +43,25 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
         binding.tookConfirmPassword.onFocusChangeListener = this
 
         binding.signUp.setOnClickListener {
-            viewmodel = ViewModelProvider(
-                requireActivity(),
-                viewModelFactory
-            ).get(MainViewModel::class.java)
             viewmodel.GetOtp(binding.phnNo.text.toString())
+            val name = binding.tookName.text.toString()
+            val address = binding.regAddress.text.toString()
+            val password = binding.tookPassword.text.toString()
+            val phone = binding.phnNo.text.toString()
+            val bundle = Bundle()
+            bundle.putString("Name", name)
+            bundle.putString("Address", address)
+            bundle.putString("Password", password)
+            bundle.putString("Phone", phone)
+
+            val fragment = OtpFragment()
+            fragment.arguments = bundle
+            fragmentManager?.beginTransaction()?.replace(R.id.activity_main, fragment)?.commit()
+
+
+//            viewmodel.otpresponse.observe(requireActivity(), Observer { response ->
+//                result = response.toString()
+//            })
 
         }
 
@@ -231,3 +249,5 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
 
 
 }
+
+
