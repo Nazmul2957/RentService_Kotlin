@@ -5,14 +5,18 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.second_kotlin_project.Model.Model.Login.Login_Response
+import com.example.second_kotlin_project.Model.Model.Login.LoginRequest
 import com.example.second_kotlin_project.Model.Model.Otp.Otp_Model
 import com.example.second_kotlin_project.Model.Model.Register.registration_model
 import com.example.second_kotlin_project.Repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
-
-class MainViewModel(val repository: Repository) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(val repository: Repository) : ViewModel() {
 
 
 //    init {
@@ -28,6 +32,8 @@ class MainViewModel(val repository: Repository) : ViewModel() {
     val otpresponse: MutableLiveData<Response<Otp_Model>> = MutableLiveData()
 
     val registrationrespons: MutableLiveData<Response<registration_model>> = MutableLiveData()
+
+    val loginrepsons: MutableLiveData<Response<Login_Response>> = MutableLiveData()
 
 
     fun GetOtp(mobile: String) {
@@ -51,6 +57,24 @@ class MainViewModel(val repository: Repository) : ViewModel() {
             registrationrespons.value = response
             Log.d("registration_successfully", response.toString())
         }
+    }
+
+    @SuppressLint("LongLogTag")
+    fun getlogin(
+        mobile: String,
+        password: String
+    ) {
+        viewModelScope.launch {
+            val response = repository.getLogin(mobile, password)
+            loginrepsons.value = response
+            Log.d("login_successfully", response.body().toString())
+
+        }
+    }
+
+
+    fun loginuser(LoginRequest: LoginRequest){
+
     }
 
 }

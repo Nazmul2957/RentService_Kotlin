@@ -15,12 +15,12 @@ object RetrofitHelper {
             .build()
     }
 
-//    fun getInstance(): Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl(Base_Url)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//    }
+    fun getInstance(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(Base_Url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     val api: ApiService by lazy {
         retrofit.create(ApiService::class.java)

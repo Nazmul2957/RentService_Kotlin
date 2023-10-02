@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.second_kotlin_project.Mainviewmodelfactory.MainViewModelFactory
 import com.example.second_kotlin_project.R
@@ -20,7 +23,7 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
     val binding get() = _binding!!
 
     lateinit var viewmodel: MainViewModel
-    //  var result: String = null.toString()
+     var result: String = null.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,11 +62,12 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
             fragmentManager?.beginTransaction()?.replace(R.id.activity_main, fragment)?.commit()
 
 
-//            viewmodel.otpresponse.observe(requireActivity(), Observer { response ->
-//                result = response.toString()
-//            })
+            viewmodel.otpresponse.observe(requireActivity(), Observer { response ->
+                result = response.toString()
+            })
 
         }
+       // setUpOnbackPressed()
 
         return binding.root
     }
@@ -167,6 +171,20 @@ class RegistrationFragment : Fragment(), View.OnFocusChangeListener {
         }
 
         return errorMessage == null
+
+    }
+
+    private fun setUpOnbackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isEnabled) {
+                    Toast.makeText(requireContext(), "Go Back", Toast.LENGTH_SHORT).show()
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
+
 
     }
 
